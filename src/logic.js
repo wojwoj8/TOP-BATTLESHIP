@@ -1,4 +1,7 @@
 const Ship = (length, hits, sunk) => {
+  const sLength = () => length;
+  const sHits = () => hits;
+  const sSunk = () => sunk;
   const isSunk = () => sunk = true;
   const gotHit = () => {
     hits += 1;
@@ -12,17 +15,22 @@ const Ship = (length, hits, sunk) => {
   };
 
   return {
-    length, hits, sunk, gotHit, isSunk, status,
+    sLength, sHits, sSunk, gotHit, isSunk, status,
   };
 };
 
 const Gameboard = () => {
   const coordinatesTab = Array(10).fill().map(() => Array(10).fill(0));
-  const status = () => console.log(`${coordinatesTab}`);
+  const status = () => coordinatesTab;
 
-  const placeShip = (length) => {
+  const placeShip = (length, x, y) => {
     const ship = Ship(length, 0, false);
+
     // place on gameboard coordinates and where ship coordinates = 1
+    for (let i = length; i > 0; i--) {
+      coordinatesTab[x][y] = 1;
+      x++;
+    }
   };
   const receiveAttack = (x, y) => {
     let tab = coordinatesTab[x][y];
@@ -33,5 +41,7 @@ const Gameboard = () => {
     }
   };
 
-  return { status };
+  return { status, placeShip };
 };
+
+export { Ship, Gameboard };
