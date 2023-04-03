@@ -1,21 +1,25 @@
-const Ship = (length, hits, sunk) => {
+const Ship = (length) => {
   const sLength = () => length;
-  const sHits = () => hits;
-  const sSunk = () => sunk;
-  const isSunk = () => sunk = true;
-  const gotHit = () => {
-    hits += 1;
-    if (hits === length) {
-      isSunk();
+  let sunk = false;
+
+  const hitTable = [];
+  const isSunk = () => sunk;
+  const showHitTable = () => hitTable;
+  const hitFields = () => {
+    for (let i = 0; i < length; i++) {
+      hitTable.push({ hit: false });
     }
-    return hits;
   };
-  const status = () => {
-    console.log(`Length: ${length}, hits: ${hits}, sunk: ${sunk}`);
+  const gotHit = (index) => {
+    hitTable[index].hit = true;
+    if (hitTable.every((field) => field.hit === true)) {
+      sunk = true;
+    }
   };
+  hitFields();
 
   return {
-    sLength, sHits, sSunk, gotHit, isSunk, status,
+    sLength, gotHit, isSunk, showHitTable,
   };
 };
 
