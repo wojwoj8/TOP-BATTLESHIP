@@ -14,6 +14,7 @@ const Ship = (length) => {
     hitTable[index].hit = true;
     if (hitTable.every((field) => field.hit === true)) {
       sunk = true;
+      console.log('ship is sunk');
     }
   };
   hitFields();
@@ -29,9 +30,19 @@ const Gameboard = () => {
   const shipsData = [];
   const getShipsData = () => shipsData;
 
+  const placeShipValidation = (length, x, y) => {
+    const calculatedXLen = x + length;
+    const calculatedYLen = y + length;
+    if (calculatedXLen > 10 || calculatedYLen > 10) {
+      throw new Error('ship out of bounds');
+    }
+  };
+  // add functon that check if ship fits on board
   const placeShip = (name, length, x, y) => {
-    const ship = Ship(length);
+    placeShipValidation(length, x, y);
 
+    const ship = Ship(length);
+    console.log('created ship');
     // place on gameboard coordinates ship name and ship field property (hit:true/false)
     for (let i = length - 1; i >= 0; i--) {
       // console.log(ship.showHitTable()[i].hit);
@@ -52,33 +63,34 @@ const Gameboard = () => {
     const tab = table()[x][y];
     // if missed
     if (tab === 0) {
-      // console.log('miss');
-      // console.log(tab);
       table()[x][y] = 2;
-      // console.log(tab);
-      // console.log(table()[x][y]);
-      // console.log(tab);
     } else if (typeof tab === 'object') {
       const shipName = tab.name;
+
       // if there is more than 1 ships it finds under which index hides our attacked ship
+
       const index = shipsData.findIndex((element) => element.name === shipName);
       const shipAttackedFieldIndex = tab.index;
-      // console.log(getShipsData()[index]);
-      // console.log(getShipsData()[index].data.showHitTable());
 
       // change hit to true in shipsData
       getShipsData()[index].data.gotHit(shipAttackedFieldIndex);
-      // console.log(getShipsData()[index].data.isSunk());
+
       // change hit to true in coordinates
       tab.hit = getShipsData()[index].data.showHitTable()[shipAttackedFieldIndex].hit;
-      // console.log(getShipsData()[index].data.isSunk());
-      // console.log(tab);
+
+      // if (getShipsData()[index].data.isSunk() === true) {
+      //   console.log('ship is sunk');
+      // }
     }
   };
 
   return {
     table, placeShip, getShipsData, receiveAttack,
   };
+};
+
+const Player = (name) => {
+
 };
 
 export { Ship, Gameboard };

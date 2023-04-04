@@ -52,6 +52,18 @@ describe('gameboard', () => {
     expect(board.table()[7][4]).toEqual(0);
   });
 
+  test('place ship beyond board', () => {
+    const board = logic.Gameboard();
+    // const statek = board.placeShip('statek1', 5, 8, 4);
+    // const statek2 = board.placeShip('statek2', 5, 1, 10);
+    expect(() => board.placeShip('statek2', 5, 1, 10)).toThrow('ship out of bounds');
+    expect(() => board.placeShip('statek2', 5, 6, 5)).toThrow('ship out of bounds');
+    // expect(board.getShipsData()[0]).toBeUndefined();
+    // expect(board.getShipsData()[1]).toBeUndefined();
+    // console.log(`statek2: ${statek2}`);
+    // console.log(board.table());
+  });
+
   test('placed ship attacked', () => {
     const board = logic.Gameboard();
     const statek = board.placeShip('statek1', 5, 2, 4);
@@ -72,7 +84,7 @@ describe('gameboard', () => {
     expect(board.table()[1][5]).toEqual({ hit: true, name: 'statek1', index: 1 });
     expect(board.table()[2][5]).toEqual({ hit: true, name: 'statek1', index: 0 });
     // console.log(board.getShipsData()[0].data.isSunk());
-    // expect(board.getShipsData()[0].data.isSunk()).toEqual(true);
+    expect(board.getShipsData()[0].data.isSunk()).toEqual(true);
   });
   test('missed attack', () => {
     const board = logic.Gameboard();
