@@ -1,4 +1,5 @@
 const logic = require('./logic');
+const main = require('./mainLoop');
 
 const ship = logic.Ship(3);
 
@@ -86,6 +87,7 @@ describe('gameboard', () => {
     // console.log(board.getShipsData()[0].data.isSunk());
     expect(board.getShipsData()[0].data.isSunk()).toEqual(true);
   });
+
   test('missed attack', () => {
     const board = logic.Gameboard();
     const statek = board.placeShip('statek1', 2, 1, 5);
@@ -93,5 +95,52 @@ describe('gameboard', () => {
     // console.log(board.table()[1][6]);
     expect(board.table()[1][6]).toEqual(2);
     expect(board.table()[1][7]).toEqual(0);
+  });
+
+  test('attack already hitted spot', () => {
+    const board = logic.Gameboard();
+    const statek = board.placeShip('statek1', 5, 2, 4);
+    // console.log(board.table());
+    expect(board.table()[2][4]).toEqual({ hit: false, name: 'statek1', index: 4 });
+    board.receiveAttack(2, 4);
+    // console.log(board.table()[2][4]);
+    expect(board.table()[2][4]).toEqual({ hit: true, name: 'statek1', index: 4 });
+    expect(board.table()[4][4]).toEqual({ hit: false, name: 'statek1', index: 2 });
+    expect(board.receiveAttack(2, 4)).toBe(1);
+  });
+});
+
+describe('player', () => {
+  test('create player and get his name', () => {
+    const player1 = logic.Player('admiralP', false);
+    expect(player1.getName()).toEqual('admiralP', false);
+  });
+  test('ai player', () => {
+    const player1 = logic.Player('admiralP', true);
+    expect(player1.getName()).toEqual('admiralP', true);
+  });
+});
+
+describe('mainLoop', () => {
+  test('attacking each other', () => {
+    const player1 = logic.Player('pl1', false);
+    const player1Gameboard = logic.Gameboard();
+    const AI = logic.Player('AI', true);
+    const AIGameboard = logic.Gameboard();
+    // const ship1 = ('ship1', 5, 2, 4);
+    // const ship2 = ('AIship2', 5, 2, 2);
+    // console.log(ship1);
+    player1Gameboard.placeShip('ship1', 5, 2, 4);
+    AIGameboard.placeShip('AIship2', 5, 2, 2);
+    console.log(player1Gameboard.getShipsData());
+    console.log(AIGameboard.getShipsData());
+    player1.playTurn(AIGameboard, AI, 1, 3);
+    // expect missed spot on enemy gameboard to be 2
+    expect(AIGameboard.table()[1][3]).toBe(2);
+    // expect that after player move his turn is changed to false
+    expect(player1.checkTurn()).toEqual(false);
+    // console.log(AI.isAi);
+    AI.playTurn(player1Gameboard, player1, 1, 3);
+    // console.log(player1Gameboard.table());
   });
 });
