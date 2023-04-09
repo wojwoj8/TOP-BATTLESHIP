@@ -143,4 +143,13 @@ describe('mainLoop', () => {
     AI.playTurn(player1Gameboard, player1, 1, 3);
     // console.log(player1Gameboard.table());
   });
+  test('mainLoop function', () => {
+    const game = main.mainLoop;
+    expect(game.player1.getName()).toEqual('Player1');
+    game.player1.playTurn(game.AIGameboard, game.AI, 1, 3);
+    expect(game.player1.checkTurn()).toEqual(false);
+    expect(game.AIGameboard.table()[1][3]).toBe(2);
+
+    // console.log(game.AI);
+  });
 });
