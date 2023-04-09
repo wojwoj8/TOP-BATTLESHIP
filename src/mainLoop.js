@@ -1,15 +1,15 @@
 import { Ship, Gameboard, Player } from './logic';
 
 const mainLoop = (() => {
+  // create players
   const player1 = Player('Player1', false);
   const AI = Player('AI', true);
 
+  // create gameboards
   const player1Gameboard = Gameboard();
   const AIGameboard = Gameboard();
 
-  const ship1 = Ship(5, 2, 4);
-  const ship2 = Ship(5, 2, 2);
-
+  // create ships
   player1Gameboard.placeShip('ship1', 5, 2, 4);
   AIGameboard.placeShip('AIship2', 5, 2, 2);
 
