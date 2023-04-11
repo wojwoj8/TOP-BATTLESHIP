@@ -88,6 +88,23 @@ describe('gameboard', () => {
     expect(board.getShipsData()[0].data.isSunk()).toEqual(true);
   });
 
+  test('all ships sunk', () => {
+    const board = logic.Gameboard();
+    const statek = board.placeShip('statek1', 2, 1, 5);
+    const statek2 = board.placeShip('statek2', 2, 4, 6);
+    // console.log(board.getShipsData()[1].data.isSunk());
+    board.receiveAttack(1, 5);
+    expect(board.getShipsData()[1].data.isSunk()).toEqual(false);
+    board.receiveAttack(2, 5);
+    // console.log(board.checkAllSunk());
+    expect(board.checkAllSunk()).toBe(false);
+    board.receiveAttack(4, 6);
+    board.receiveAttack(5, 6);
+    expect(board.checkAllSunk()).toBe(true);
+
+    expect(board.getShipsData()[1].data.isSunk()).toEqual(true);
+  });
+
   test('missed attack', () => {
     const board = logic.Gameboard();
     const statek = board.placeShip('statek1', 2, 1, 5);
@@ -132,8 +149,8 @@ describe('mainLoop', () => {
     // console.log(ship1);
     player1Gameboard.placeShip('ship1', 5, 2, 4);
     AIGameboard.placeShip('AIship2', 5, 2, 2);
-    console.log(player1Gameboard.getShipsData());
-    console.log(AIGameboard.getShipsData());
+    // console.log(player1Gameboard.getShipsData());
+    // console.log(AIGameboard.getShipsData());
     player1.playTurn(AIGameboard, AI, 1, 3);
     // expect missed spot on enemy gameboard to be 2
     expect(AIGameboard.table()[1][3]).toBe(2);

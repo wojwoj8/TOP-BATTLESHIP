@@ -87,9 +87,10 @@ const Gameboard = () => {
       return 0;
     }
   };
+  const checkAllSunk = () => getShipsData().every((shipData) => shipData.data.isSunk() === true);
 
   return {
-    table, placeShip, getShipsData, receiveAttack,
+    table, placeShip, getShipsData, receiveAttack, checkAllSunk,
   };
 };
 
@@ -112,6 +113,10 @@ const Player = (name, ai) => {
       while (enemyGameboard.receiveAttack(x, y) !== 0);
     }
     enemyGameboard.receiveAttack(x, y);
+    if (enemyGameboard.checkAllSunk() === true) {
+      console.log('game finished');
+      return true;
+    }
     playerTurn = false;
     enemyPlayer.playerTurn = true;
     return { x, y };

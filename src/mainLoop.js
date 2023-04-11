@@ -12,6 +12,7 @@ const mainLoop = (() => {
   // create ships
   player1Gameboard.placeShip('ship1', 5, 2, 4);
   player1Gameboard.placeShip('ship2', 3, 6, 6);
+  AIGameboard.placeShip('AIship1', 2, 4, 4);
   AIGameboard.placeShip('AIship2', 5, 2, 2);
 
   function markShipsOnGameBoard() {
@@ -31,7 +32,8 @@ const mainLoop = (() => {
       }
     }
   }
-  console.log(player1Gameboard.getShipsData());
+
+  // console.log(player1Gameboard.getShipsData());
 
   return {
     player1, AI, player1Gameboard, AIGameboard, markShipsOnGameBoard,

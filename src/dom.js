@@ -81,6 +81,7 @@ function playT(col, row, cellDiv) {
   } else {
     el.style.backgroundColor = 'blue';
   }
+
   console.log(mainLoop.player1Gameboard.table());
   cellDiv.removeEventListener('click', playT);
 }
