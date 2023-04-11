@@ -37,8 +37,8 @@ function createMain() {
 
   mainContentLeft.classList = 'main-content-left';
   mainContentRight.classList = 'main-content-right';
-  mainContentLeft.appendChild(createGameBoard());
-  mainContentRight.appendChild(createGameBoard());
+  mainContentLeft.appendChild(createGameBoard('left'));
+  mainContentRight.appendChild(createGameBoard('right'));
 
   mainContent.classList = 'main-content';
 
@@ -63,7 +63,29 @@ function createFooter() {
   return footer;
 }
 
-function createGameBoard() {
+function playT(col, row, cellDiv) {
+  // console.log(`clicked cell at x:${col}, y:${row}`);
+  mainLoop.player1.playTurn(mainLoop.AIGameboard, mainLoop.AI, col, row);
+  if (typeof (mainLoop.AIGameboard.table()[col][row]) === 'object') {
+    cellDiv.style.backgroundColor = 'red';
+  } else {
+    cellDiv.style.backgroundColor = 'blue';
+  }
+  const aiTurn = mainLoop.AI.playTurn(mainLoop.player1Gameboard, mainLoop.player1, col, row);
+  // console.log(aiTurn.x);
+  // console.log(aiTurn.x);
+  const elements = document.querySelectorAll(`[data-x="${aiTurn.x}"][data-y="${aiTurn.y}"]`);
+  const el = elements[0];
+  if (typeof (mainLoop.player1Gameboard.table()[aiTurn.x][aiTurn.y]) === 'object') {
+    el.style.backgroundColor = 'red';
+  } else {
+    el.style.backgroundColor = 'blue';
+  }
+  console.log(mainLoop.player1Gameboard.table());
+  cellDiv.removeEventListener('click', playT);
+}
+
+function createGameBoard(name) {
   const gameBoard = document.createElement('div');
   gameBoard.classList.add('game-board');
 
@@ -76,9 +98,13 @@ function createGameBoard() {
       cellDiv.classList.add('cell');
       cellDiv.setAttribute('data-x', col);
       cellDiv.setAttribute('data-y', row);
-      cellDiv.addEventListener('click', () => {
-        console.log(`clicked cell at x:${col}, y:${row}`);
-      });
+      if (name === 'right') {
+        const playHandler = () => {
+          playT(col, row, cellDiv);
+          cellDiv.removeEventListener('click', playHandler);
+        };
+        cellDiv.addEventListener('click', playHandler);
+      }
       rowDiv.appendChild(cellDiv);
     }
     gameBoard.appendChild(rowDiv);
@@ -91,7 +117,7 @@ function webInit() {
   content.appendChild(createHeader());
   content.appendChild(createMain());
   content.appendChild(createFooter());
-
+  mainLoop.markShipsOnGameBoard();
   return content;
 }
 export default webInit;

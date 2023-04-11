@@ -114,6 +114,7 @@ const Player = (name, ai) => {
     enemyGameboard.receiveAttack(x, y);
     playerTurn = false;
     enemyPlayer.playerTurn = true;
+    return { x, y };
   };
 
   return {
