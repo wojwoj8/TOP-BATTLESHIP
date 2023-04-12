@@ -22,29 +22,11 @@ const mainLoop = (() => {
   AIGameboard.placeRandom('AIship31', 3);
   AIGameboard.placeRandom('AIship2', 2);
 
-  function markShipsOnGameBoard() {
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-      // console.log(player1Gameboard.table()[i][j]);
-        if (typeof (player1Gameboard.table()[i][j]) === 'object') {
-          // console.log('test');
-          const elements = document.querySelectorAll(`[data-x="${i}"][data-y="${j}"]`);
-          const el = elements[0];
-          // console.log(el);
-          el.style.backgroundColor = 'green';
-        // const playerGameboardDisplay = document.querySelector('.main-content-left');
-        // const cell = playerGameboardDisplay.querySelector(`[data-x="${i}]"[data-y="${j}"]`);
-        // cell.style.background = 'green';
-        }
-      }
-    }
-  }
-
   console.log(player1Gameboard.getShipsData());
   console.log(player1Gameboard.table());
 
   return {
-    player1, AI, player1Gameboard, AIGameboard, markShipsOnGameBoard,
+    player1, AI, player1Gameboard, AIGameboard,
   };
 })();
 

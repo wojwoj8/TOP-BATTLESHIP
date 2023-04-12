@@ -41,7 +41,7 @@ const Gameboard = () => {
     for (let i = length - 1; i >= 0; i--) {
       console.log();
       if (typeof (table()[x + i][y]) === 'object') {
-        console.log('there is already a ship');
+        // console.log('there is already a ship');
         return false;
       }
     }

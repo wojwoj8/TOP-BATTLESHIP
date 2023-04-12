@@ -1,5 +1,5 @@
 import { Ship, Gameboard, Player } from './logic';
-import { mainLoop } from './mainLoop';
+import { mainLoop, resetGame } from './mainLoop';
 
 // function createPlayer() {
 //   const input = document.createElement('input');
@@ -66,6 +66,24 @@ function createFooter() {
   return footer;
 }
 
+function winHandler() {
+  const winner = document.querySelector('.main-title');
+  const button = document.createElement('button');
+  button.textContent = 'Play Again!';
+  button.addEventListener('click', () => {
+    const main = document.querySelector('.main');
+    const content = document.querySelector('#content');
+    main.innerHTML = '';
+    // mainLoop.resetGame();
+    content.appendChild(createMain());
+    markShipsOnGameBoard();
+    markShipsOnGameBoardAI();
+    console.log(mainLoop.player1Gameboard.table());
+  });
+
+  winner.appendChild(button);
+}
+
 function playT(col, row, cellDiv) {
   // console.log(`clicked cell at x:${col}, y:${row}`);
   const playerTurn = mainLoop.player1.playTurn(mainLoop.AIGameboard, mainLoop.AI, col, row);
@@ -76,7 +94,11 @@ function playT(col, row, cellDiv) {
   }
   if (playerTurn.z === true) {
     const winner = document.querySelector('.main-title');
-    winner.innerHTML = 'Player Won!!!';
+    const win = document.createElement('h2');
+    winHandler();
+    win.innerHTML = 'Player Won!!!';
+    winner.appendChild(win);
+    return;
   }
   const aiTurn = mainLoop.AI.playTurn(mainLoop.player1Gameboard, mainLoop.player1, col, row);
   // console.log(aiTurn.x);
@@ -90,7 +112,11 @@ function playT(col, row, cellDiv) {
   }
   if (aiTurn.z === true) {
     const winner = document.querySelector('.main-title');
-    winner.innerHTML = 'AI Won!!!';
+    const win = document.createElement('h2');
+    winHandler();
+    win.innerHTML = 'AI Won!!!';
+    winner.appendChild(win);
+    return;
   }
 
   console.log(mainLoop.player1Gameboard.table());
@@ -123,13 +149,37 @@ function createGameBoard(name) {
   }
   return gameBoard;
 }
+function markShipsOnGameBoard() {
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      if (typeof (mainLoop.player1Gameboard.table()[i][j]) === 'object') {
+        const elements = document.querySelectorAll(`[data-x="${i}"][data-y="${j}"]`);
+        const el = elements[0];
+        el.style.backgroundColor = 'green';
+      }
+    }
+  }
+}
+
+function markShipsOnGameBoardAI() {
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      if (typeof (mainLoop.AIGameboard.table()[i][j]) === 'object') {
+        const elements = document.querySelectorAll(`[data-x="${i}"][data-y="${j}"]`);
+        const el = elements[1];
+        el.style.backgroundColor = 'pink';
+      }
+    }
+  }
+}
 
 function webInit() {
   const content = document.querySelector('#content');
   content.appendChild(createHeader());
   content.appendChild(createMain());
   content.appendChild(createFooter());
-  mainLoop.markShipsOnGameBoard();
+  markShipsOnGameBoard();
+  markShipsOnGameBoardAI();
   return content;
 }
 export default webInit;
