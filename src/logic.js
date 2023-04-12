@@ -33,13 +33,23 @@ const Gameboard = () => {
   const placeShipValidation = (length, x, y) => {
     const calculatedXLen = x + length;
     const calculatedYLen = y + length;
-    if (calculatedXLen > 10 || calculatedYLen > 10) {
-      throw new Error('ship out of bounds');
+    for (let i = length - 1; i >= 0; i--) {
+      if (typeof (table()[x][y]) === 'object') {
+        console.log('there is already a ship');
+        return false;
+      }
     }
+    if (calculatedXLen > 10 || calculatedYLen > 10) {
+      // throw new Error('ship out of bounds');
+      return false;
+    }
+    return true;
   };
   // add functon that check if ship fits on board
   const placeShip = (name, length, x, y) => {
-    placeShipValidation(length, x, y);
+    if (placeShipValidation(length, x, y) === false) {
+      throw new Error('ship out of bounds');
+    }
 
     const ship = Ship(length);
     // console.log('created ship');
@@ -58,6 +68,16 @@ const Gameboard = () => {
       data: ship,
 
     });
+  };
+  const placeRandom = (name, length) => {
+    let x;
+    let y;
+    do {
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
+    }
+    while (placeShipValidation(length, x, y) !== true);
+    placeShip(name, length, x, y);
   };
   const receiveAttack = (x, y) => {
     // if legal attack return 0, else return 1
@@ -90,7 +110,7 @@ const Gameboard = () => {
   const checkAllSunk = () => getShipsData().every((shipData) => shipData.data.isSunk() === true);
 
   return {
-    table, placeShip, getShipsData, receiveAttack, checkAllSunk,
+    table, placeShip, getShipsData, receiveAttack, checkAllSunk, placeRandom,
   };
 };
 
@@ -100,7 +120,7 @@ const Player = (name, ai) => {
   const checkTurn = () => playerTurn;
 
   const isAi = ai;
-
+  let z = false;
   const playTurn = (enemyGameboard, enemyPlayer, x, y) => {
     if (isAi === true) {
       let i = 0;
@@ -115,7 +135,8 @@ const Player = (name, ai) => {
     enemyGameboard.receiveAttack(x, y);
     if (enemyGameboard.checkAllSunk() === true) {
       console.log('game finished');
-      return true;
+      z = true;
+      return { x, y, z };
     }
     playerTurn = false;
     enemyPlayer.playerTurn = true;

@@ -12,8 +12,11 @@ const mainLoop = (() => {
   // create ships
   player1Gameboard.placeShip('ship1', 5, 2, 4);
   player1Gameboard.placeShip('ship2', 3, 6, 6);
-  AIGameboard.placeShip('AIship1', 2, 4, 4);
-  AIGameboard.placeShip('AIship2', 5, 2, 2);
+  AIGameboard.placeRandom('AIship5', 5);
+  AIGameboard.placeRandom('AIship4', 4);
+  AIGameboard.placeRandom('AIship32', 3);
+  AIGameboard.placeRandom('AIship31', 3);
+  AIGameboard.placeRandom('AIship2', 2);
 
   function markShipsOnGameBoard() {
     for (let i = 0; i < 10; i++) {

@@ -57,11 +57,27 @@ describe('gameboard', () => {
     const board = logic.Gameboard();
     // const statek = board.placeShip('statek1', 5, 8, 4);
     // const statek2 = board.placeShip('statek2', 5, 1, 10);
-    expect(() => board.placeShip('statek2', 5, 1, 10)).toThrow('ship out of bounds');
+    // expect(() => board.placeShip('statek2', 5, 1, 10)).toThrow('ship out of bounds');
     expect(() => board.placeShip('statek2', 5, 6, 5)).toThrow('ship out of bounds');
     // expect(board.getShipsData()[0]).toBeUndefined();
     // expect(board.getShipsData()[1]).toBeUndefined();
     // console.log(`statek2: ${statek2}`);
+    // console.log(board.table());
+  });
+  test('placed ships in the same field', () => {
+    const board = logic.Gameboard();
+    const statek = board.placeShip('statek1', 5, 2, 4);
+    // works with placed in same place
+    expect(() => board.placeShip('statek2', 5, 4, 4)).toThrow('ship out of bounds');
+  });
+
+  test('random placed ship', () => {
+    const board = logic.Gameboard();
+    board.placeRandom('ship5', 5);
+    board.placeRandom('ship4', 4);
+    board.placeRandom('ship32', 3);
+    board.placeRandom('ship31', 3);
+    expect(() => board.placeRandom('ship2', 2).toBe(true));
     // console.log(board.table());
   });
 

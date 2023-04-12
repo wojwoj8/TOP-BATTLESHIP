@@ -33,12 +33,10 @@ function createMain() {
   titleAI.textContent = 'AI';
 
   mainContentLeft.appendChild(titlePlayer);
-  mainContentRight.appendChild(titleAI);
 
   mainContentLeft.classList = 'main-content-left';
   mainContentRight.classList = 'main-content-right';
   mainContentLeft.appendChild(createGameBoard('left'));
-  mainContentRight.appendChild(createGameBoard('right'));
 
   mainContent.classList = 'main-content';
 
@@ -46,10 +44,15 @@ function createMain() {
   mainProjectTitle.textContent = '';
   main.classList = 'main';
 
+  mainContentRight.appendChild(titleAI);
+  mainContentRight.appendChild(createGameBoard('right'));
+
   main.appendChild(mainProjectTitle);
   mainContent.appendChild(mainContentLeft);
   mainContent.appendChild(mainContentRight);
   main.appendChild(mainContent);
+
+  // mainContentRight.style.display = 'none';
 
   return main;
 }
@@ -65,11 +68,15 @@ function createFooter() {
 
 function playT(col, row, cellDiv) {
   // console.log(`clicked cell at x:${col}, y:${row}`);
-  mainLoop.player1.playTurn(mainLoop.AIGameboard, mainLoop.AI, col, row);
+  const playerTurn = mainLoop.player1.playTurn(mainLoop.AIGameboard, mainLoop.AI, col, row);
   if (typeof (mainLoop.AIGameboard.table()[col][row]) === 'object') {
     cellDiv.style.backgroundColor = 'red';
   } else {
     cellDiv.style.backgroundColor = 'blue';
+  }
+  if (playerTurn.z === true) {
+    const winner = document.querySelector('.main-title');
+    winner.innerHTML = 'Player Won!!!';
   }
   const aiTurn = mainLoop.AI.playTurn(mainLoop.player1Gameboard, mainLoop.player1, col, row);
   // console.log(aiTurn.x);
@@ -80,6 +87,10 @@ function playT(col, row, cellDiv) {
     el.style.backgroundColor = 'red';
   } else {
     el.style.backgroundColor = 'blue';
+  }
+  if (aiTurn.z === true) {
+    const winner = document.querySelector('.main-title');
+    winner.innerHTML = 'AI Won!!!';
   }
 
   console.log(mainLoop.player1Gameboard.table());
