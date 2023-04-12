@@ -48,6 +48,9 @@ function createMain() {
   mainContentRight.appendChild(createGameBoard('right'));
 
   main.appendChild(mainProjectTitle);
+  // const button = document.createElement('button');
+  // button.textContent = 'Play Again!';
+  // mainProjectTitle.appendChild(button);
   mainContent.appendChild(mainContentLeft);
   mainContent.appendChild(mainContentRight);
   main.appendChild(mainContent);
@@ -73,20 +76,28 @@ function winHandler() {
   button.addEventListener('click', () => {
     const main = document.querySelector('.main');
     const content = document.querySelector('#content');
-    main.innerHTML = '';
-    // mainLoop.resetGame();
+    main.remove();
+    mainLoop.resetGame();
     content.appendChild(createMain());
     markShipsOnGameBoard();
-    markShipsOnGameBoardAI();
-    console.log(mainLoop.player1Gameboard.table());
+    // markShipsOnGameBoardAI();
+    // console.log(mainLoop.player1Gameboard.table());
   });
 
   winner.appendChild(button);
 }
-
+// creates clone of all cells and replace originals
+function removeAllListeners() {
+  const allCells = document.querySelectorAll('.cell');
+  allCells.forEach((cell) => {
+    const newCell = cell.cloneNode(true);
+    cell.parentNode.replaceChild(newCell, cell);
+  });
+}
 function playT(col, row, cellDiv) {
   // console.log(`clicked cell at x:${col}, y:${row}`);
   const playerTurn = mainLoop.player1.playTurn(mainLoop.AIGameboard, mainLoop.AI, col, row);
+
   if (typeof (mainLoop.AIGameboard.table()[col][row]) === 'object') {
     cellDiv.style.backgroundColor = 'red';
   } else {
@@ -98,6 +109,8 @@ function playT(col, row, cellDiv) {
     winHandler();
     win.innerHTML = 'Player Won!!!';
     winner.appendChild(win);
+    removeAllListeners();
+    // cellDiv.removeEventListener('click', playT);
     return;
   }
   const aiTurn = mainLoop.AI.playTurn(mainLoop.player1Gameboard, mainLoop.player1, col, row);
@@ -116,10 +129,11 @@ function playT(col, row, cellDiv) {
     winHandler();
     win.innerHTML = 'AI Won!!!';
     winner.appendChild(win);
+    removeAllListeners();
     return;
   }
 
-  console.log(mainLoop.player1Gameboard.table());
+  // console.log(mainLoop.player1Gameboard.table());
   cellDiv.removeEventListener('click', playT);
 }
 
@@ -152,6 +166,8 @@ function createGameBoard(name) {
 function markShipsOnGameBoard() {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
+      // console.log(mainLoop.player1Gameboard.table());
+      // console.log(mainLoop.player1);
       if (typeof (mainLoop.player1Gameboard.table()[i][j]) === 'object') {
         const elements = document.querySelectorAll(`[data-x="${i}"][data-y="${j}"]`);
         const el = elements[0];
@@ -161,17 +177,17 @@ function markShipsOnGameBoard() {
   }
 }
 
-function markShipsOnGameBoardAI() {
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      if (typeof (mainLoop.AIGameboard.table()[i][j]) === 'object') {
-        const elements = document.querySelectorAll(`[data-x="${i}"][data-y="${j}"]`);
-        const el = elements[1];
-        el.style.backgroundColor = 'pink';
-      }
-    }
-  }
-}
+// function markShipsOnGameBoardAI() {
+//   for (let i = 0; i < 10; i++) {
+//     for (let j = 0; j < 10; j++) {
+//       if (typeof (mainLoop.AIGameboard.table()[i][j]) === 'object') {
+//         const elements = document.querySelectorAll(`[data-x="${i}"][data-y="${j}"]`);
+//         const el = elements[1];
+//         el.style.backgroundColor = 'pink';
+//       }
+//     }
+//   }
+// }
 
 function webInit() {
   const content = document.querySelector('#content');
@@ -179,7 +195,7 @@ function webInit() {
   content.appendChild(createMain());
   content.appendChild(createFooter());
   markShipsOnGameBoard();
-  markShipsOnGameBoardAI();
+  // markShipsOnGameBoardAI();
   return content;
 }
 export default webInit;

@@ -110,9 +110,16 @@ const Gameboard = () => {
     }
   };
   const checkAllSunk = () => getShipsData().every((shipData) => shipData.data.isSunk() === true);
-
+  const reset = () => {
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        coordinatesTab[i][j] = 0;
+      }
+    }
+    shipsData.length = 0;
+  };
   return {
-    table, placeShip, getShipsData, receiveAttack, checkAllSunk, placeRandom,
+    table, placeShip, getShipsData, receiveAttack, checkAllSunk, placeRandom, reset,
   };
 };
 
@@ -129,14 +136,14 @@ const Player = (name, ai) => {
       do {
         x = Math.floor(Math.random() * 10);
         y = Math.floor(Math.random() * 10);
-        console.log(`illegal hit: ${i}, coord: [${x}][${y}]`);
+        // console.log(`illegal hit: ${i}, coord: [${x}][${y}]`);
         i++;
       }
       while (enemyGameboard.receiveAttack(x, y) !== 0);
     }
     enemyGameboard.receiveAttack(x, y);
     if (enemyGameboard.checkAllSunk() === true) {
-      console.log('game finished');
+      // console.log('game finished');
       z = true;
       return { x, y, z };
     }
