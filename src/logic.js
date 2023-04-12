@@ -33,15 +33,17 @@ const Gameboard = () => {
   const placeShipValidation = (length, x, y) => {
     const calculatedXLen = x + length;
     const calculatedYLen = y + length;
-    for (let i = length - 1; i >= 0; i--) {
-      if (typeof (table()[x][y]) === 'object') {
-        console.log('there is already a ship');
-        return false;
-      }
-    }
+
     if (calculatedXLen > 10 || calculatedYLen > 10) {
       // throw new Error('ship out of bounds');
       return false;
+    }
+    for (let i = length - 1; i >= 0; i--) {
+      console.log();
+      if (typeof (table()[x + i][y]) === 'object') {
+        console.log('there is already a ship');
+        return false;
+      }
     }
     return true;
   };

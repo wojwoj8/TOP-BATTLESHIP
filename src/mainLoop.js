@@ -10,8 +10,12 @@ const mainLoop = (() => {
   const AIGameboard = Gameboard();
 
   // create ships
-  player1Gameboard.placeShip('ship1', 5, 2, 4);
-  player1Gameboard.placeShip('ship2', 3, 6, 6);
+  player1Gameboard.placeRandom('ship5', 5);
+  player1Gameboard.placeRandom('ship4', 4);
+  player1Gameboard.placeRandom('ship32', 3);
+  player1Gameboard.placeRandom('ship31', 3);
+  player1Gameboard.placeRandom('ship2', 2);
+
   AIGameboard.placeRandom('AIship5', 5);
   AIGameboard.placeRandom('AIship4', 4);
   AIGameboard.placeRandom('AIship32', 3);
@@ -36,7 +40,8 @@ const mainLoop = (() => {
     }
   }
 
-  // console.log(player1Gameboard.getShipsData());
+  console.log(player1Gameboard.getShipsData());
+  console.log(player1Gameboard.table());
 
   return {
     player1, AI, player1Gameboard, AIGameboard, markShipsOnGameBoard,
